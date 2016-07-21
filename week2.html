@@ -124,26 +124,23 @@ $(document).ready(function () {
 
 
 <pre class="r"><code># create factorial of n!
-myfactorial &lt;- function(n)
-{
+myfactorial &lt;- function(n) {
   fac &lt;- 1 # 0! = 1! = 1 by definition
-  for (i in 2:n)
-  {
+  for (i in 2:n) {
     fac &lt;- fac*i
   }
   fac
 }</code></pre>
-<pre class="r"><code>ncr &lt;- function(n,r)
-{
+<pre class="r"><code>ncr &lt;- function(n,r) {
   # Compute n Choose r using self created factorial function
-  if (n==r || r == 0) # return 1 as nCr = 1
+  if (n == r || r == 0) # return 1 as nCr = 1
     com &lt;- 1
-  else if (n &lt; r)
+  else if (n &lt; r) # return o as n &lt; r is not allowed/not exist
     com &lt;- 0
   else
-    com &lt;- myfactorial(n)/(myfactorial(n-r)* myfactorial(r))
+    com &lt;- myfactorial(n) / (myfactorial(n - r) * myfactorial(r))
     
-  com
+  com # return N choose r
 }</code></pre>
 <pre class="r"><code># Should return 1 if n=r
 ncr(1,1)</code></pre>
