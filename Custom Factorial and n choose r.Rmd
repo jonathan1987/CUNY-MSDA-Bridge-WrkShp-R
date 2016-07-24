@@ -1,0 +1,74 @@
+---
+title: "Week2 - Creating custom Factorial Function and n Choose r Function"
+author: "Jonathan Hernandez"
+date: "July 20, 2016"
+output: html_document
+---
+
+```{r factorial, echo=TRUE, cache=TRUE}
+
+# create factorial of n!
+myfactorial <- function(n) {
+  
+  # fac: variable to store the factorial of n that in fac = n!
+  if (n < 0) {
+    fac <- NaN
+  }
+  else if (n == 0 || n == 1) {
+    fac <- 1 # 0! = 1! = 1 by definition
+  }
+  else {
+    fac <- 1
+    for (i in 2:n) {
+      fac <- fac*i
+    }
+  }
+  fac
+}
+```
+
+```{r nchooser, echo=TRUE, cache=TRUE}
+
+mychoose <- function(n,r) {
+  # ncr: variable that will compute nCr of given n and r
+  if (r < 0 || n < r || n == 0) { 
+    ncr <- 0
+  }
+  else {
+    ncr <- myfactorial(n) / (myfactorial(n - r) * myfactorial(r))
+  }
+  ncr # return N choose r
+}
+```
+
+```{r testchoose, echo=TRUE,eval=TRUE,background=mychoose}
+
+# Testing the myfactorial function
+
+# Should return NaN just like factoria() if n<0
+myfactorial(-3)
+
+# Should return 1 for n=0 or n=1
+myfactorial(0) == myfactorial(1)
+
+# Should return n! for n > 1
+myfactorial(8)
+
+# Test the mychoose function
+
+# Should return 1 if n=r
+mychoose(1,1)
+mychoose(5,5)
+
+# Should return n if r=1
+mychoose(10,1)
+
+# Should return 0 if n < r or r < 0  or n=0
+mychoose(4,9)
+mychoose(5,-2)
+mychoose(0,4)
+
+# Should return 56 for 8C3 and 20 for 6C3
+mychoose(8,3)
+mychoose(6,3)
+```
