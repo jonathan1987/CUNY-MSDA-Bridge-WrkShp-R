@@ -1,0 +1,37 @@
+---
+title: "Week 3 Assignment - Examining Mushrooms Dataset"
+author: "Jonathan Hernandez"
+date: "July 29, 2016"
+output: html_document
+---
+
+# Acquire the Mushrooms Dataset from the UCI Machine Learning Repository
+```{r getDataset,echo=TRUE,cache=TRUE,tidy=TRUE,tidy.opts=list(width.cutoff=80)}
+# load the dataset (by going to the URL it appears to be a CSV file)
+mushrooms <- read.csv("https://archive.ics.uci.edu/ml/machine-learning-databases/mushroom/agaricus-lepiota.data"
+                      ,header = FALSE)
+```
+
+# Make the attributes of this dataset a bit more meaningful
+```{r changeColumnNames, echo=TRUE,cache=TRUE}
+# Change the names to something more better to read
+# before name change:
+names(mushrooms)
+
+# After name change
+attributes <- read.table("Mushroom_attributes.txt",header=FALSE)
+# as a data frame use [] notation to get the column
+colnames(mushrooms) <- attributes[,1]
+colnames(mushrooms)
+```
+# Get a random sample of the dataset that has the edibility and other fields
+```{r randomSample, echo=TRUE}
+# get a random sample of 100 mushrooms
+samples <- sample(1:nrow(mushrooms),100)
+
+# fields for selecting the attributes we want to display
+fields <- c("edibility","odor","stalk_root","veil_type","population","habitat")
+
+# display the subsetted data
+mushrooms[samples, fields]
+```
