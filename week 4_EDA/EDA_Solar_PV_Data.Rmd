@@ -1,0 +1,89 @@
+---
+title: "Examining Data from the Solar Photovoltaic Incentive Program beginning 2010"
+author: "Jonathan Hernandez"
+date: "August 1, 2016"
+output: html_document
+---
+
+## The dataset that will be looked into is based on the Solar Photovoltaic 
+## Incentive Program that has been completed among various Counties and Cities in
+## New York State beginning in August 2010. This program is for installing grid-connected
+## solar electric or photovoltaic systems for residential, commercial buildings/sectors.
+## data that is included is the year is
+##     - Project Installation Year
+##     - PRoject Cost
+##     - City and/or County location
+##     - Expected Kwh Annual Production/Output
+
+
+### Get the data from the website
+```{r getDataSet, cache=TRUE,echo=TRUE}
+
+# get URL of where the dataset is located and read it for analysis
+URL <- "https://data.ny.gov/api/views/3pzs-2zsk/rows.csv?accessType=DOWNLOAD"
+solar_PV <- read.csv(URL)
+```
+
+### Get some basic summary of the data like its structure and summary
+
+```{r dataSummary, echo=TRUE}
+# show the structure of the dataset
+str(solar_PV)
+
+# show some basic summary statistics on the data
+summary(solar_PV)
+```
+
+## See the names and clean up the Column names if necessary
+```{r cleanDataSet, echo=TRUE}
+names(solar_PV)
+
+# R takes characters like , and spaces and replaces them with .
+# Lets rather replace those instead with _ character
+colnames(solar_PV) <- gsub("\\.\\.*" , "_", colnames(solar_PV))
+
+# to display the updated (cleaner) names
+colnames(solar_PV)
+```
+
+### Examine some data with basic plots; show the log distribution of 
+### Expected KWh Annual Production and boxplot based on year project was installed
+### in homes/buildings
+
+```{r simplePlots, echo=TRUE}
+
+# show the (log) frequency histogram of Expected KWh Annual Production
+# by taking the log of the Expected KWh Annual Production we can visualize
+# better the data and see what kind of distribution it reveals
+with(solar_PV,hist(log(Expected_KWh_Annual_Production)))
+
+# now show a box plot of Expected_KWh_Annual_Production per year
+# Color based on group for better reading and visulization
+with(solar_PV,boxplot(log(Expected_KWh_Annual_Production) ~ Project_Install_Year,
+                      xlab = "Project Install Year",
+                      ylab = "Expected Kwh Annual Production",
+                      col = c("red","blue","green","yellow","purple","orange"),
+                      main = "Expected Kwh Annual Production grouped by Project Year"))
+```
+
+### show a scatterplot of the project count by city vs Project Cost
+
+```{r scatterplot, echo=TRUE}
+with(solar_PV,plot(Project_Count_by_City,Project_Cost,
+                   xlab = "Project Count by City",
+                   ylab = "Project Cost",
+                   main = "Project Count by City vs Project Cost", pch = 8))
+
+# draw a best fit line for the data so we can see if there is a strong relationship
+abline(lm(solar_PV$Project_Cost ~ solar_PV$Project_Count_by_City), col = "red")
+```
+
+### Some things to note on these plots
+####    - The Expected Kwh Annual Production is a right-skewed distribution
+####    - Based on the box plot, the median Expected Annual Kwh Production was
+####      about the same in 2011, 2012, 2014 and 2015. Also in 2014 and 2015,
+####      Many projects were expected to produce much higher Kwh of solar energy
+####      that in previous years
+####    - The scatterplot of Project Count by City vs Project Cost shows a strong
+####      positive linear relationship. Cities where there weren't many Projects
+####      are heavily clustered around having cheap project costs.
